@@ -1,0 +1,45 @@
+version: '3'
+services:
+  client:
+    build:
+      context: client
+  proxy:
+    build:
+      context: proxy
+    ports:
+      - "80:80"
+  core:
+    build: core
+    container_name: core
+    ports:
+      - "3030:3030"
+    privileged: true
+    tty: true
+  api:
+    build: api
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./api:/usr/src/api
+      - /usr/src/api/node_modules
+    depends_on:
+      - "mongo"
+  test:
+    build: test
+    ports:
+      - "3333:3333"
+    volumes:
+      - ./test:/usr/src/test
+      - /usr/src/test/node_modules
+    depends_on:
+      - "mongo"
+  mongo:
+    image: "mongo"
+    ports:
+      - "27017:27017"
+  adminmongo:
+    image: "mrvautin/adminmongo"
+    ports:
+      - 1234:1234
+    environment:
+      - HOST=0.0.0.0

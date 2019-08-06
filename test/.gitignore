@@ -1,0 +1,6 @@
+node_modules/*
+mongo-dumps/
+static/
+tmp/
+package-lock.json
+yarn.lock
